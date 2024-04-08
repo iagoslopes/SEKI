@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "714606196800",
+    "project_id": "seki-99cd1",
+    "storage_bucket": "seki-99cd1.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:714606196800:android:323c0d2b49aca237be07a5",
+        "android_client_info": {
+          "package_name": "com.cchronos.seki"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBZgW5hRt2LFMUw_AiNVUAebouuMAY1QI0"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
