@@ -25,6 +25,7 @@ Future<void> main() async {
 }
 
 class MyApp extends StatelessWidget {
+  // ignore: use_super_parameters
   const MyApp({Key? key}) : super(key: key);
   @override
   Widget build(BuildContext context) {
@@ -36,7 +37,9 @@ class MyApp extends StatelessWidget {
       ),
       initialRoute: '/',
       routes: {
-        '/': (context) => ChecagemPage(),
+        // ignore: prefer_const_constructors
+        '/': (context) => ChecagemPage(), // '/': (context) => inicio(),
+        //'checagem': (context) => ChecagemPage(),
         '/login': (context) => LoginPage(),
         '/register': (context) => RegisterPage(),
         '/alterar_senha': (context) => FirstAccessPage(),
