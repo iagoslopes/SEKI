@@ -8,14 +8,17 @@ class HomePage extends StatelessWidget {
 
   Future<String?> _getUserName() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
-    String? uid = prefs.getString('uid');
+    String? usuarioLogado = prefs.getString('usuarioLogado');
 
-    if (uid != null) {
-      DocumentSnapshot<Map<String, dynamic>> userDoc =
-          await FirebaseFirestore.instance.collection('users').doc(uid).get();
+    if (usuarioLogado != null) {
+      DocumentSnapshot<Map<String, dynamic>> userDoc = await FirebaseFirestore
+          .instance
+          .collection('Usuarios')
+          .doc(usuarioLogado)
+          .get();
 
       if (userDoc.exists) {
-        String? userName = userDoc.data()?['name'];
+        String? userName = userDoc.data()?['Nome'];
         return userName;
       } else {
         print('Documento do usuário não encontrado no Firestore.');
@@ -29,7 +32,7 @@ class HomePage extends StatelessWidget {
   Future<void> _logout(BuildContext context) async {
     try {
       SharedPreferences prefs = await SharedPreferences.getInstance();
-      await prefs.remove('uid'); // Remova o UID do SharedPreferences
+      await prefs.remove('usuarioLogado'); // Remova o UID do SharedPreferences
 
       await FirebaseAuth.instance.signOut();
 
