@@ -4,12 +4,28 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:logger/logger.dart';
 import 'package:http/http.dart' as http;
+import 'package:shared_preferences/shared_preferences.dart';
 
 class RegisterPage extends StatelessWidget {
   RegisterPage({Key? key}) : super(key: key);
   final TextEditingController _emailController = TextEditingController();
   final TextEditingController _passwordController = TextEditingController();
-  final TextEditingController _nameController = TextEditingController();
+  final TextEditingController _nomeController = TextEditingController();
+  final TextEditingController _empresaController = TextEditingController();
+  final TextEditingController _nivelController = TextEditingController();
+  final TextEditingController _statusController = TextEditingController();
+  final TextEditingController _geradorController = TextEditingController();
+
+  Future<String?> _getUsuarioLogado() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    String? usuarioLogado = prefs.getString('usuarioLogado');
+
+    if (usuarioLogado != null) {
+      return usuarioLogado;
+    } else {
+      return null;
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -27,20 +43,20 @@ class RegisterPage extends StatelessWidget {
               decoration: const InputDecoration(labelText: 'Email'),
             ),
             TextFormField(
-              controller: _nameController,
+              controller: _nomeController,
               decoration: const InputDecoration(labelText: 'Nome'),
             ),
             TextFormField(
-              controller: _nameController,
+              controller: _empresaController,
               decoration: const InputDecoration(labelText: 'Empresa'),
             ),
             TextFormField(
-              controller: _nameController,
-              decoration: const InputDecoration(labelText: 'Setor'),
+              controller: _nivelController,
+              decoration: const InputDecoration(labelText: 'Nível de Acesso'),
             ),
             TextFormField(
-              controller: _nameController,
-              decoration: const InputDecoration(labelText: 'Tipo'),
+              controller: _statusController,
+              decoration: const InputDecoration(labelText: 'Status'),
             ),
             TextFormField(
               controller: _passwordController,
@@ -48,7 +64,7 @@ class RegisterPage extends StatelessWidget {
               obscureText: true,
             ),
             TextFormField(
-              controller: _nameController,
+              controller: _geradorController,
               decoration: const InputDecoration(labelText: 'Gerador de senha'),
             ),
             ElevatedButton(
@@ -97,12 +113,16 @@ class RegisterPage extends StatelessWidget {
   void _register(BuildContext context) async {
     String email = _emailController.text.trim();
     String password = _passwordController.text.trim();
-    String name = _nameController.text.trim();
-    String user_name = name;
+    String nome = _nomeController.text.trim();
+    String empresa = _empresaController.text.trim();
+    String nivel = _nivelController.text.trim();
+    String status = _statusController.text.trim();
+    String user_name = nome;
     String user_email = email;
     String user_subject = 'Criação de Usuário';
     String message =
-        'Seu usuário foi criado com sucesso! Para entrar no sistema, acesse com o e-mail: $email e senha: $password cadastrados.';
+        'Seu usuário foi criado com sucesso! Para entrar no sistema, acesse com o e-mail: $email e senha: $password .';
+    String? usuarioLogado = await _getUsuarioLogado();
 
     var logger = Logger(
       printer: PrettyPrinter(),
@@ -121,14 +141,21 @@ class RegisterPage extends StatelessWidget {
 
       // Agora você pode usar o UID para associar documentos no Firestore
       // Por exemplo, você pode criar um documento na coleção 'users' com o UID como identificador
-      await FirebaseFirestore.instance.collection('users').doc(uid).set({
-        'name': user_name,
-        'email': user_email,
+      await FirebaseFirestore.instance.collection('Usuarios').doc(uid).set({
+        'Email': email,
+        'IDempresa': empresa,
+        'IDnivel': nivel,
+        'Nome': nome,
+        'Status': status,
         // Outros campos...
       });
 
-      await FirebaseFirestore.instance.collection('information').doc(uid).set({
-        'first_access': true,
+      await FirebaseFirestore.instance
+          .collection('DetalheUsuario')
+          .doc(uid)
+          .set({
+        'PrimeiroAcesso': true,
+        'QuemCriou': usuarioLogado,
         // Outros campos...
       });
 
