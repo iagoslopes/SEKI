@@ -21,27 +21,27 @@ class LoginPage extends StatelessWidget {
       );
 
       // Obtenha o UID do usuário autenticado
-      String uid = userCredential.user!.uid;
+      String usuarioLogado = userCredential.user!.uid;
 
       // Armazene o UID localmente usando shared_preferences
       SharedPreferences prefs = await SharedPreferences.getInstance();
-      await prefs.setString('uid', uid);
+      await prefs.setString('usuarioLogado', usuarioLogado);
 
       // Verifique se é o primeiro acesso consultando o Firestore
       DocumentSnapshot<Map<String, dynamic>> userDoc = await FirebaseFirestore
           .instance
-          .collection('information')
-          .doc(uid)
+          .collection('DetalheUsuario')
+          .doc(usuarioLogado)
           .get();
 
       if (userDoc.exists) {
-        bool primeiroAcesso = userDoc.data()!['first_access'] ?? false;
+        bool primeiroAcesso = userDoc.data()!['PrimeiroAcesso'] ?? false;
 
         await FirebaseFirestore.instance
-            .collection('information')
-            .doc(uid)
+            .collection('DetalheUsuario')
+            .doc(usuarioLogado)
             .update({
-          'data_access': FieldValue
+          'DataAcesso': FieldValue
               .serverTimestamp(), // Use FieldValue.serverTimestamp() para obter a hora atual no servidor
         });
 
