@@ -17,10 +17,10 @@ class FirstAccessPage extends StatelessWidget {
 
         // Atualize o campo 'primeiro_acesso' no Firestore
         FirebaseFirestore.instance
-            .collection('information')
+            .collection('DetalheUsuario')
             .doc(user.uid)
             .update({
-          'first_access': false,
+          'PrimeiroAcesso': false,
         });
 
         // Senha atualizada com sucesso
